@@ -11,18 +11,48 @@ import Seperator from '../../auth/Seperator';
 import { axiosServer } from '../../../api/axios';
 import { LOGIN_URL } from '../../../config/config';
 import useAuth from '../../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../ErrorMessage';
+import styled from 'styled-components';
+
+const PersistBox = styled.div`
+  font-size: 1.4rem;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  label {
+    margin: 0;
+  }
+
+  [type='checkbox'] {
+    height: 20px;
+    width: 20px;
+    margin: 0 5px 2px 2px;
+  }
+`;
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const { auth, setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   const emailRef = useRef();
+
   const navigate = useNavigate();
+  const location = useLocation();
+  // const from = location.state?.from?.pathname || '/';
+
+  const togglePersist = () => {
+    setPersist(prev => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('persist', persist);
+  }, [persist]);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -37,8 +67,10 @@ const LoginPage = () => {
       });
 
       const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      setAuth({ email, pwd, roles, accessToken });
+      // const roles = response?.data?.roles;
+      // setAuth({ email, pwd, roles, accessToken });
+      // const roles = response?.data?.roles;
+      setAuth({ email, pwd, accessToken });
       setEmail('');
       setPwd('');
       navigate('/', { replace: true });
@@ -73,6 +105,10 @@ const LoginPage = () => {
           />
           <Input onChange={e => setPwd(e.target.value)} type="password" placeholder="Password" />
           <Button>Sign In</Button>
+          <PersistBox>
+            <input type="checkbox" id="persist" onChange={togglePersist} checked={persist} />
+            <label htmlFor="persist">Trust This Device</label>
+          </PersistBox>
         </form>
         <Seperator />
       </FormBox>
