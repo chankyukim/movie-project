@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Section = styled.section`
   max-width: 100%;
-  height: 50rem;
+  height: 70rem;
   /* background-image: url('https://picsum.photos/seed/picsum/1000/1000'); */
   background-image: ${props => `url(${props.image})`};
   background-position: center;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from '../../../api/axios';
+import { axiosApi } from '../../../api/axios';
 import { API_URL, IMAGE_BASE_URL } from '../../../config/config';
 import Header from './Header';
 import MainSection from './MainSection';
@@ -14,7 +14,7 @@ const LandingPage = () => {
 
   const fetchMovies = async endPoint => {
     try {
-      const response = await axios.get(endPoint, {
+      const response = await axiosApi.get(endPoint, {
         signal: abortController.signal,
       });
       return response.data;
@@ -52,7 +52,6 @@ const LandingPage = () => {
 
   return (
     <div>
-      <Header />
       {topImage && (
         <TopImage
           title={topImage.original_title}
