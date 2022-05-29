@@ -8,7 +8,9 @@ import SubTitle from '../../auth/SubTitle';
 import Button from '../../auth/Button';
 import BottomBox from '../../auth/BottomBox';
 import Error from '../../auth/Error';
-import axios from '../../../api/axios';
+import { axiosServer } from '../../../api/axios';
+import { REGISTER_URL } from '../../../config/config';
+import { useNavigate } from 'react-router-dom';
 
 const NAME_REGEX = /^[가-힣|a-zA-Z|0-9]{2,23}$/;
 //한글,영문자a-z,A-z,숫자 가능 2글자 이상, 23글자 이하
@@ -16,7 +18,6 @@ const EMAIL_REGEX = /^[0-9a-z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]
 //5~20자의 영문자, 숫자와 특수기호(_),(-)만 가능합니다.
 const PWD_REGEX = /^(?=.*[a-z]|[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,16}$/;
 //8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.
-const REGISTER_URL = '/api/users/signup';
 
 const RegisterPage = () => {
   const nameRef = useRef();
@@ -35,6 +36,8 @@ const RegisterPage = () => {
 
   const [errorMsg, setErrorMsg] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     nameRef.current.focus();
   }, []);
@@ -51,7 +54,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await axios.post(
+      const response = await axiosServer.post(
         REGISTER_URL,
         JSON.stringify({ username: name, email, pwd }),
         {
@@ -59,6 +62,7 @@ const RegisterPage = () => {
           withCredentials: true,
         }
       );
+      navigate('/signin');
       // setName('');
       // setEmail('');
       // setPwd('');

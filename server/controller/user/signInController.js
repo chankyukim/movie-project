@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
   const { email, pwd } = req.body;
+  // console.log('email', email);
+  // console.log('pwd', pwd);
   if (!email || !pwd) res.status(400).json({ message: 'Email and Password are required.' });
 
   const foundUser = await User.findOne({ email }).exec();
@@ -23,7 +25,7 @@ const handleLogin = async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: '10s' }
   );
 
   const refreshToken = jwt.sign(
@@ -40,7 +42,8 @@ const handleLogin = async (req, res) => {
   res.cookie('jwt', refreshToken, {
     httpOnly: true,
     sameSite: 'None',
-    maxAge: 24 * 60 * 60 * 1000,
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000, //1day
   });
 
   res.json({ accessToken, roles });

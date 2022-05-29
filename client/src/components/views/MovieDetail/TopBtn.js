@@ -1,5 +1,7 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+// import { FAVORITE_URL } from '../../../config/config';
 
 const Container = styled.div`
   display: flex;
@@ -27,9 +29,30 @@ const Container = styled.div`
 `;
 
 const TopBtn = () => {
+  // useEffect(() => {
+  //   async function fetchFavorite() {
+  //     try {
+  //       const response = await axios.post(
+  //         FAVORITE_URL,
+  //         // JSON.stringify({ userFrom, movieId }),
+  //         {
+  //           headers: { 'Content-Type': 'application/json' },
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       return response.data;
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+
+  //   fetchFavorite() //
+  //     .then(response => console.log(response));
+  // }, []);
+
   return (
     <Container>
-      <button>Add to Favorite</button>
+      <button>Add to Favorite 0</button>
     </Container>
   );
 };
